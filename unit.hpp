@@ -84,6 +84,14 @@ namespace Unit {
 					unit = new CBaseUnit(100, 0, 50, EUnitClass::WIZARD);
 				return unit;
 			}
-			static std::vector<CBaseUnit*> create_army(EUnitClass unit_class, 
+			static CArmy* create_army(EUnitClass unit_class, size_t army_size) {
+				CArmy* army = NULL;
+				if(unit_class == EUnitClass::ARCHER)
+					army = new CArmy(100, 50, 25, army_size, EUnitClass::ARCHER);
+				else if(unit_class == EUnitClass::WARRIOR)
+					army = new CBaseUnit(100, 100, 15, army_size, EUnitClass::WARRIOR);
+				else if(unit_class == EUnitClass::WIZARD):
+					army = new CBaseUnit(100, 0, 50, army_size, EUnitClass::WIZARD);
+				return army;
 	};
 }
