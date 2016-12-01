@@ -6,22 +6,31 @@ class IException {
 };
 
 class ExInitFailed : public IException {
+	private:
+		std::string m_error;
 	public:
+		ExInitFailed(const std::string& error) : m_error(error) {}
 		std::string what() const {
-			return "[EE]: Failed to init SDL";
+			return "[EE]: Failed to init SDL: " + m_error;
 		}
 };
 
 class ExWindowCreationFailed : public IException {
+	private:
+		std::string m_error;
 	public:
+		ExWindowCreationFailed(const std::string& error) : m_error(error) {}
 		std::string what() const {
-			return "[EE]: Failed to create window";
+			return "[EE]: Failed to create window: " + m_error;
 		}
 };
 
 class ExRendererCreationFailed : public IException {
+	private:
+		std::string m_error;
 	public:
+		ExRendererCreationFailed(const std::string& error) : m_error(error) {}
 		std::string what() const {
-			return "[EE]: Failed to create renderer";
+			return "[EE]: Failed to create renderer: " + m_error;
 		}
 };
