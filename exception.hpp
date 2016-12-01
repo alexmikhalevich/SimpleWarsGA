@@ -2,7 +2,7 @@
 
 class IException {
 	public:
-		std::string what() const = 0;
+		virtual std::string what() const = 0;
 };
 
 class ExInitFailed : public IException {
