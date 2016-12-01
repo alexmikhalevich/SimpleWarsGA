@@ -7,11 +7,11 @@
 
 class CView {
 	private:
-		SDL_DisplayMode* m_display_mode;
+		SDL_DisplayMode m_display_mode;
 		SDL_Window* m_window;
 		SDL_Renderer* m_renderer;
 	public:
-		CView() {}
+		CView(); 
 		void init();
 		~CView();
 };
