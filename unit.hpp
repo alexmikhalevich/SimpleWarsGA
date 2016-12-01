@@ -4,7 +4,8 @@ namespace Unit {
 	enum EUnitClass {
 		ARCHER,
 		WARRIOR,
-		WIZARD
+		WIZARD,
+		NO_UNIT
 	};
 
 	enum EDamageType {
