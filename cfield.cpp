@@ -1,4 +1,29 @@
 #include "cfield.h"
+using namespace Representation;
+
+int CShotRepresentation::x() const {
+	return m_x;
+}
+
+int CShotRepresentation::y() const {
+	return m_y;
+}
+
+Unit::EUnitClass CShotRepresentation::type() const {
+	return Unit::EUnitClass::NO_UNIT;
+}
+
+int CUnitRepresentation::x() const {
+	return m_x;
+}
+
+int CUnitRepresentation::y() const {
+	return m_y;
+}
+
+Unit::EUnitClass CUnitRepresentation::type() const {
+	return m_type;
+}
 
 CField::CField(size_t vsize, size_t hsize) {
 	m_field.resize(hsize);
