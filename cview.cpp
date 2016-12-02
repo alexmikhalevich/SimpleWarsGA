@@ -1,4 +1,5 @@
 #include "cview.h"
+#include <iostream>
 
 void CView::init() {
 	if(SDL_Init(SDL_INIT_VIDEO) != 0) throw new ExInitFailed(std::string(SDL_GetError()));
@@ -17,78 +18,72 @@ void CView::init() {
 	_process_events();
 }
 
-void CView::_set_unit_rect_color(Unit::EUnitClass type, bool side) const {
+void CView::_set_represent_rect(Unit::EUnitClass type, SDL_Rect* rect, bool side) const {
 	switch(type) {
 		case Unit::EUnitClass::ARCHER:
-			SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, (side ? 0 : 100));
+			SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 0);
 			break;
 		case Unit::EUnitClass::WARRIOR:
-			SDL_SetRenderDrawColor(m_renderer, 230, 255, 0, (side ? 0 : 100));
+			SDL_SetRenderDrawColor(m_renderer, 230, 255, 0, 0);
 			break;
 		case Unit::EUnitClass::WIZARD:
-			SDL_SetRenderDrawColor(m_renderer, 105, 99, 188, (side ? 0 : 100));
+			SDL_SetRenderDrawColor(m_renderer, 105, 99, 188, 0);
 			break;
 		case Unit::EUnitClass::NO_UNIT:
-			SDL_SetRenderDrawColor(m_renderer, 255, 0, 0, (side ? 0 : 100));
+			SDL_SetRenderDrawColor(m_renderer, 255, 0, 0, 0);
 			break;
 	}
+	if(side) SDL_RenderFillRect(m_renderer, rect); 
+	SDL_RenderDrawRect(m_renderer, rect); 
 }
 
 void CView::_redraw() {
 	m_field->renew();
-	SDL_SetRenderDrawColor(m_renderer, 0, 200, 0, 0);
+	SDL_SetRenderDrawColor(m_renderer, 0, 255, 0, 0);
 	SDL_RenderClear(m_renderer);
-	while(m_field->get_next(&m_next_iter)) {
-		_set_unit_rect_color((*m_next_iter)->type(), (*m_next_iter)->side());
-		SDL_RenderDrawRect(m_renderer, (*m_next_iter)->get_rect()); 
-	}
-	_set_unit_rect_color(m_active_type, m_active_side);
-	SDL_RenderDrawRect(m_renderer, &m_active_type_rect); 
+	while(m_field->get_next(&m_next_iter)) 
+		_set_represent_rect((*m_next_iter)->type(), (*m_next_iter)->rect(), (*m_next_iter)->side());
+	_set_represent_rect(m_active_type, &m_active_type_rect, m_active_side);
 	SDL_RenderPresent(m_renderer);
 }
 
 void CView::_process_events() {
 	SDL_Event event;
-	const Uint8* keyboard_state = SDL_GetKeyboardState(NULL);
 	bool quit = false;
+	const Uint8* keyboard_state = SDL_GetKeyboardState(NULL);
 	while(!quit) {
-		while(SDL_PollEvent(&event)) {
-			SDL_PumpEvents();
-			if(event.type == SDL_QUIT) quit = true;
-			if(event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT) {
-				m_field->add_element(
-						new Representation::CUnitRepresentation(event.button.x - Representation::CELL_SIZE / 2, 
-									     		event.button.y - Representation::CELL_SIZE / 2,
-									     		m_active_type,
-											m_active_side));
-//				_redraw();
+		SDL_WaitEvent(&event);
+		if(event.type == SDL_QUIT) quit = true;
+		else if(event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT) {
+			m_field->add_element(
+					new Representation::CUnitRepresentation(event.button.x - Representation::CELL_SIZE / 2, 
+										event.button.y - Representation::CELL_SIZE / 2,
+										m_active_type,
+										m_active_side));
+		}
+		else if(event.type == SDL_KEYDOWN) {
+			if(event.key.keysym.sym == SDLK_SPACE) {
+				m_active_side = m_active_side ? 0 : 1;
+				std::cerr << m_active_side << std::endl;
 			}
-			else if(keyboard_state[SDL_SCANCODE_A]) {
+			else if(event.key.keysym.sym == SDLK_a) {
 				m_active_type = Unit::EUnitClass::ARCHER;
-//				_redraw();
 			}
-			else if(keyboard_state[SDL_SCANCODE_W]) {
+			else if(event.key.keysym.sym == SDLK_w) {
 				m_active_type = Unit::EUnitClass::WARRIOR;
-//				_redraw();
 			}
-			else if(keyboard_state[SDL_SCANCODE_Z]) {
+			else if(event.key.keysym.sym == SDLK_z) {
 				m_active_type = Unit::EUnitClass::WIZARD;
-//				_redraw();
 			}
-			else if(keyboard_state[SDL_SCANCODE_U]) {
+			else if(event.key.keysym.sym == SDLK_u) {
 				m_field->pop_element();
-//				_redraw();
 			}
-			else if(keyboard_state[SDL_SCANCODE_SPACE]) {
-				m_active_side = ~m_active_side;
-//				_redraw();
-			}
-			else if(keyboard_state[SDL_SCANCODE_RETURN]) {
+			else if(event.key.keysym.sym == SDLK_RETURN) {
 				quit = true;
 				_renew_cycle();
 			}
-			_redraw();
 		}
+		_redraw();
 	}
 }
 
