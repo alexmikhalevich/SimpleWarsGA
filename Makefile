@@ -2,7 +2,7 @@ CC=g++
 CFLAGS=-c -std=c++11 -Wall -g
 LFLAGS=-lSDL2
 
-all: main.o cview.o
+all: main.o cview.o cfield.o
 	$(CC) $(LFLAGS) cview.o cfield.o main.o -o game
 main.o: main.cpp
 	$(CC) $(CFLAGS) main.cpp
