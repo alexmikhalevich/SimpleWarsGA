@@ -50,19 +50,20 @@ CField::CField(/*size_t vsize, size_t hsize*/) {
 			m_field[i][j] = Unit::EUnitClass::NO_UNIT;
 	}
 	*/
-	m_next_element = m_elements.begin();
+	//m_next_element = m_elements.begin();
 }
 
-bool CField::get_next(element& next) {
-	if(m_next_element != m_elements.end()) {
-		next = m_next_element++;
+bool CField::get_next(element* next) {
+	if(m_elements.empty()) return false;
+	else if(m_next_element != m_elements.end()) {
+		*next = m_next_element++;
 		return true;
 	}
 	else return false;
 }
 
 void CField::renew() {
-	m_next_element = m_elements.begin();
+	if(!m_elements.empty()) m_next_element = m_elements.begin();
 }
 
 void CField::add_element(IRepresentation* representation) {
@@ -70,7 +71,7 @@ void CField::add_element(IRepresentation* representation) {
 }
 
 void CField::pop_element() {
-	m_elements.pop_back();
+	if(!m_elements.empty()) m_elements.pop_back();
 }
 
 void CField::renew_positions() {

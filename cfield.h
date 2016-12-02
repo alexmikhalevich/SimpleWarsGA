@@ -6,7 +6,7 @@
 #include "unit.hpp"
 
 namespace Representation {
-	constexpr int CELL_SIZE = 5;
+	constexpr int CELL_SIZE = 20;
 	class IRepresentation {
 		public:
 			virtual SDL_Rect* get_rect() = 0;
@@ -45,7 +45,7 @@ namespace Representation {
 			element m_next_element;
 		public:
 			CField(/*size_t vsize, size_t hsize*/);
-			bool get_next(element& next);
+			bool get_next(element* next);
 			void renew();
 			void add_element(IRepresentation* representation);
 			void pop_element();
