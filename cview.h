@@ -22,7 +22,7 @@ class CView {
 	public:
 		CView() {} 
 		void init();
-		~CView() {}
+		~CView();
 };
 
 #endif //CVIEW_CPP
