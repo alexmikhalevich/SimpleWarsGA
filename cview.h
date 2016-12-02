@@ -13,6 +13,7 @@ class CView {
 		SDL_Renderer* m_renderer;
 		Representation::CField* m_field;
 		Unit::EUnitClass m_active_type;
+		Representation::element m_next_iter;
 		bool m_active_side;
 		SDL_Rect m_active_type_rect;
 		void _set_unit_rect_color(Unit::EUnitClass type, bool side) const;
