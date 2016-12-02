@@ -10,9 +10,11 @@ class CView {
 		SDL_DisplayMode m_display_mode;
 		SDL_Window* m_window;
 		SDL_Renderer* m_renderer;
+		CField* m_field;
 	public:
 		CView(); 
 		void init();
+		void draw();
 		~CView();
 };
 
