@@ -1,12 +1,12 @@
 #include "cfield.h"
 using namespace Representation;
 
-CShotRepresentation::CShotRepresentation(int xupperleft, int yupperleft) {
+CShotRepresentation::CShotRepresentation(int xupperleft, int yupperleft, bool side) {
 	m_rect.x = xupperleft;
 	m_rect.y = yupperleft;
 	m_rect.w = CELL_SIZE;
 	m_rect.h = CELL_SIZE;
-	m_type = Unit::EUnitClass::NO_UNIT;
+	m_side = side;
 }
 
 SDL_Rect* CShotRepresentation::get_rect() {
@@ -17,12 +17,17 @@ Unit::EUnitClass CShotRepresentation::type() const {
 	return Unit::EUnitClass::NO_UNIT;
 }
 
-CUnitRepresentation::CUnitRepresentation(int xupperleft, int yupperleft, Unit::EUnitClass type) {
+bool CShotRepresentation::side() const {
+	return m_side;
+}
+
+CUnitRepresentation::CUnitRepresentation(int xupperleft, int yupperleft, Unit::EUnitClass type, bool side) {
 	m_rect.x = xupperleft;
 	m_rect.y = yupperleft;
 	m_rect.w = CELL_SIZE;
 	m_rect.h = CELL_SIZE;
 	m_type = type;
+	m_side = side;
 }
 
 SDL_Rect* CUnitRepresentation::get_rect() {
@@ -31,6 +36,10 @@ SDL_Rect* CUnitRepresentation::get_rect() {
 
 Unit::EUnitClass CUnitRepresentation::type() const {
 	return m_type;
+}
+
+bool CUnitRepresentation::side() const {
+	return m_side;
 }
 
 CField::CField(/*size_t vsize, size_t hsize*/) {
@@ -58,4 +67,11 @@ void CField::renew() {
 
 void CField::add_element(IRepresentation* representation) {
 	m_elements.push_back(representation);
+}
+
+void CField::pop_element() {
+	m_elements.pop_back();
+}
+
+void CField::renew_positions() {
 }

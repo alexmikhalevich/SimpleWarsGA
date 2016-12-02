@@ -6,32 +6,36 @@
 #include "unit.hpp"
 
 namespace Representation {
-	typedef std::vector<IRepresentation*>::iterator element;
 	constexpr int CELL_SIZE = 5;
 	class IRepresentation {
 		public:
 			virtual SDL_Rect* get_rect() = 0;
 			virtual Unit::EUnitClass type() const = 0;
+			virtual bool side() const = 0;
 	};
-
+	typedef std::vector<IRepresentation*>::iterator element;
 	class CUnitRepresentation : public IRepresentation {
 		private:
 			SDL_Rect m_rect;
 			Unit::EUnitClass m_type;
+			bool m_side;
 		public:
-			CUnitRepresentation(int xupperleft, int yupperleft, Unit::EUnitClass type);
+			CUnitRepresentation(int xupperleft, int yupperleft, Unit::EUnitClass type, bool side);
 			SDL_Rect* get_rect();
 			Unit::EUnitClass type() const;
+			bool side() const;
 	};
 
 	class CShotRepresentation : public IRepresentation {
 		private:
 			SDL_Rect m_rect;
+			bool m_side;
 			//TODO: shot type?
 		public:
-			CShotRepresentation(int xupperleft, int yupperleft);
+			CShotRepresentation(int xupperleft, int yupperleft, bool side);
 			SDL_Rect* get_rect();
 			Unit::EUnitClass type() const;
+			bool side() const;
 	};
 
 	class CField {
@@ -44,6 +48,8 @@ namespace Representation {
 			bool get_next(element& next);
 			void renew();
 			void add_element(IRepresentation* representation);
+			void pop_element();
+			void renew_positions();
 	};
 }
 #endif //CFIELD_H
