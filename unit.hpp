@@ -1,3 +1,5 @@
+#ifndef UNIT_HPP
+#define UNIT_HPP
 #include <vector>
 
 namespace Unit {
@@ -11,10 +13,10 @@ namespace Unit {
 	enum EDamageType {
 		PHYSICAL, 
 		MAGICAL
-	}
+	};
 	
 	class CBaseUnit {
-		private:
+		protected:
 			unsigned int m_hp;
 			unsigned int m_armor;
 			unsigned int m_base_damage;
@@ -42,15 +44,15 @@ namespace Unit {
 					else {
 						damage -= m_armor;
 						m_armor = 0;
-						m_hp = std::max(0, m_hp - damage);
+						m_hp = std::max((unsigned int)0, m_hp - damage);
 					}
 				}
-				else if(type == EDamageType::MAGICAL) m_hp = std::max(0, m_hp - damage);
+				else if(type == EDamageType::MAGICAL) m_hp = std::max((unsigned int)0, m_hp - damage);
 			}
 	};
 
 	class CArmy : public CBaseUnit {
-		private:
+		protected:
 			size_t m_size;
 			unsigned int m_base_hp;
 			unsigned int m_base_armor;
@@ -71,7 +73,7 @@ namespace Unit {
 				units.push_back(new CBaseUnit(unit_hp, unit_armor, m_base_damage, m_class));
 				return units;
 			}
-	}
+	};
 
 	class CCreator {
 		public:
@@ -81,7 +83,7 @@ namespace Unit {
 					unit = new CBaseUnit(100, 50, 25, EUnitClass::ARCHER);
 				else if(unit_class == EUnitClass::WARRIOR)
 					unit = new CBaseUnit(100, 100, 15, EUnitClass::WARRIOR);
-				else if(unit_class == EUnitClass::WIZARD):
+				else if(unit_class == EUnitClass::WIZARD)
 					unit = new CBaseUnit(100, 0, 50, EUnitClass::WIZARD);
 				return unit;
 			}
@@ -90,9 +92,11 @@ namespace Unit {
 				if(unit_class == EUnitClass::ARCHER)
 					army = new CArmy(100, 50, 25, army_size, EUnitClass::ARCHER);
 				else if(unit_class == EUnitClass::WARRIOR)
-					army = new CBaseUnit(100, 100, 15, army_size, EUnitClass::WARRIOR);
-				else if(unit_class == EUnitClass::WIZARD):
-					army = new CBaseUnit(100, 0, 50, army_size, EUnitClass::WIZARD);
+					army = new CArmy(100, 100, 15, army_size, EUnitClass::WARRIOR);
+				else if(unit_class == EUnitClass::WIZARD)
+					army = new CArmy(100, 0, 50, army_size, EUnitClass::WIZARD);
 				return army;
+			}
 	};
-}
+};
+#endif //UNIT_HPP
