@@ -9,7 +9,7 @@ namespace Representation {
 	constexpr int CELL_SIZE = 20;
 	class IRepresentation {
 		public:
-			virtual SDL_Rect* get_rect() = 0;
+			virtual SDL_Rect* rect() = 0;
 			virtual Unit::EUnitClass type() const = 0;
 			virtual bool side() const = 0;
 	};
@@ -21,7 +21,7 @@ namespace Representation {
 			bool m_side;
 		public:
 			CUnitRepresentation(int xupperleft, int yupperleft, Unit::EUnitClass type, bool side);
-			SDL_Rect* get_rect();
+			SDL_Rect* rect();
 			Unit::EUnitClass type() const;
 			bool side() const;
 	};
@@ -33,7 +33,7 @@ namespace Representation {
 			//TODO: shot type?
 		public:
 			CShotRepresentation(int xupperleft, int yupperleft, bool side);
-			SDL_Rect* get_rect();
+			SDL_Rect* rect();
 			Unit::EUnitClass type() const;
 			bool side() const;
 	};

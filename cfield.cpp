@@ -9,7 +9,7 @@ CShotRepresentation::CShotRepresentation(int xupperleft, int yupperleft, bool si
 	m_side = side;
 }
 
-SDL_Rect* CShotRepresentation::get_rect() {
+SDL_Rect* CShotRepresentation::rect() {
 	return &m_rect;
 }
 
@@ -30,7 +30,7 @@ CUnitRepresentation::CUnitRepresentation(int xupperleft, int yupperleft, Unit::E
 	m_side = side;
 }
 
-SDL_Rect* CUnitRepresentation::get_rect() {
+SDL_Rect* CUnitRepresentation::rect() {
 	return &m_rect;
 }
 
