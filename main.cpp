@@ -9,5 +9,6 @@ int main(int argc, char** argv) {
 		std::cerr << e->what() << std::endl;
 	}
 
+	delete view;
 	return 0;
 }
