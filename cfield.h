@@ -1,47 +1,49 @@
 #ifndef CFIELD_H
 #define CFIELD_H
 #include <vector>
+#include <iterator>
+#include <SDL2/SDL_rect.h>
 #include "unit.hpp"
 
 namespace Representation {
+	typedef std::vector<IRepresentation*>::iterator element;
+	constexpr int CELL_SIZE = 5;
 	class IRepresentation {
 		public:
-			virtual int x() const = 0;
-			virtual int y() const = 0;
+			virtual SDL_Rect* get_rect() = 0;
 			virtual Unit::EUnitClass type() const = 0;
 	};
 
 	class CUnitRepresentation : public IRepresentation {
 		private:
-			int m_x;
-			int m_y;
+			SDL_Rect m_rect;
 			Unit::EUnitClass m_type;
 		public:
-			CUnitRepresentation(int x, int y, Unit::EUnitClass type) : m_x(x), m_y(y), m_type(type) {}
-			int x() const;
-			int y() const;
+			CUnitRepresentation(int xupperleft, int yupperleft, Unit::EUnitClass type);
+			SDL_Rect* get_rect();
 			Unit::EUnitClass type() const;
 	};
 
 	class CShotRepresentation : public IRepresentation {
 		private:
-			int m_x;
-			int m_y;
+			SDL_Rect m_rect;
+			//TODO: shot type?
 		public:
-			CShotRepresentation(int x, int y) : m_x(x), m_y(y) {}
-			int x() const;
-			int y() const;
+			CShotRepresentation(int xupperleft, int yupperleft);
+			SDL_Rect* get_rect();
 			Unit::EUnitClass type() const;
 	};
 
 	class CField {
 		private:
-			std::vector<std::vector<Unit::EUnitClass>> m_field;
+			//std::vector<std::vector<Unit::EUnitClass>> m_field;
 			std::vector<IRepresentation*> m_elements;
+			element m_next_element;
 		public:
-			CField(size_t vsize, size_t hsize);
-			void set_cell(size_t x, size_t y, Unit::EUnitClass value);
-			Unit::EUnitClass get_type(size_t x, size_t y) const;
+			CField(/*size_t vsize, size_t hsize*/);
+			bool get_next(element& next);
+			void renew();
+			void add_element(IRepresentation* representation);
 	};
 }
 #endif //CFIELD_H
