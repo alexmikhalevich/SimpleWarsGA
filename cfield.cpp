@@ -2,12 +2,17 @@
 using namespace Field;
 
 CField::CField(size_t vsize, size_t hsize) {
+	m_logic = NULL;
 	m_field.resize(hsize);
 	for(size_t i = 0; i < hsize; ++i) {
 		m_field[i].resize(vsize);
 		for(size_t j = 0; j < vsize; ++j) m_field[i][j] = NULL; 
 	}
 	//m_next_element = m_elements.begin();
+}
+
+CField::~CField() {
+	if(m_logic) delete m_logic;
 }
 
 bool CField::get_next(element* next) {
@@ -26,7 +31,11 @@ void CField::renew() {
 void CField::add_element(Representation::IRepresentation* representation) {
 	int x = representation->x();
 	int y = representation->y();
-	m_field[x][y] = representation;
+	Logic::ILogicObject* obj;
+	if(representation->type() == Unit::EUnitClass::NO_UNIT) obj = dynamic_cast<Logic::CBullet*>(obj);
+	else obj = dynamic_cast<Logic::CUnit*>(obj);
+	//TODO: build obj
+	m_field[x][y] = obj;
 	m_elements.push_back(representation);
 }
 
@@ -40,11 +49,15 @@ void CField::pop_element() {
 }
 
 void CField::renew_positions() {
-	for(size_t i = 0; i < m_elements.size(); ++i) {
-		m_elements[i]->move(m_logic->direction());
-	}
+	m_logic->update();
 }
 
 bool CField::element_exists(int x, int y) const {
-	return (m_field[x / CELL_SIZE][y / CELL_SIZE] != NULL);
+	return (m_field[x / Representation::CELL_SIZE][y / Representation::CELL_SIZE] != NULL);
+}
+
+void CField::activate_logic() {
+	m_logic = new Logic::CGeneralLogic(&m_field);
+	for(size_t i = 0; i < m_elements.size(); ++i)
+		m_logic->add_unit(dynamic_cast<Representation::CUnitRepresentation*>(m_elements[i]));
 }
