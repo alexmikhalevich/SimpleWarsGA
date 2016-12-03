@@ -39,7 +39,7 @@ class ExInvalidUnit : public IException {
 	private:
 		std::string m_error;
 	public:
-		ExInvalidUnit(const std::string& error) m_error(error) {}
+		ExInvalidUnit(const std::string& error) : m_error(error) {}
 		std::string what() const {
 			return "[EE]: Invalid unit: " + m_error;
 		}
