@@ -38,6 +38,10 @@ namespace Unit {
 			unsigned int get_base_damage() const { return m_base_damage; }
 			unsigned int get_armor() const { return m_armor; }
 			EUnitClass get_class() const { return m_class; }
+			EDamageType damage_type() const {
+				if(m_class == EUnitClass::WIZARD) return EDamageType::MAGICAL;
+				else return EDamageType::PHYSICAL;
+			}
 			void take_damage(unsigned int damage, EDamageType type) {
 				if(type == EDamageType::PHYSICAL) {
 					if(m_armor >= damage) m_armor -= damage;
