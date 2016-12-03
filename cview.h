@@ -11,9 +11,9 @@ class CView {
 		SDL_DisplayMode m_display_mode;
 		SDL_Window* m_window;
 		SDL_Renderer* m_renderer;
-		Representation::CField* m_field;
+		Field::CField* m_field;
 		Unit::EUnitClass m_active_type;
-		Representation::element m_next_iter;
+		Field::element m_next_iter;
 		bool m_active_side;
 		SDL_Rect m_active_type_rect;
 		void _set_represent_rect(Unit::EUnitClass type, SDL_Rect* rect, bool side) const;

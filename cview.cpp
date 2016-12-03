@@ -7,7 +7,7 @@ void CView::init() {
 	m_window = SDL_CreateWindow("SimpleGame", 0, 0, 500, 500, SDL_WINDOW_SHOWN); //TODO
 	if(m_window == NULL) throw new ExWindowCreationFailed(std::string(SDL_GetError())); 
 	m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-	m_field = new Representation::CField(500 / Representation::CELL_SIZE, 500 / Representation::CELL_SIZE); //TODO 
+	m_field = new Field::CField(500 / Representation::CELL_SIZE, 500 / Representation::CELL_SIZE); //TODO 
 	m_active_type = Unit::EUnitClass::ARCHER;
 	m_active_type_rect.x = 0;
 	m_active_type_rect.y = 0;
@@ -76,6 +76,7 @@ void CView::_process_events() {
 			}
 			else if(event.key.keysym.sym == SDLK_RETURN) {
 				quit = true;
+				m_field->activate_logic();
 				_renew_cycle();
 			}
 		}
