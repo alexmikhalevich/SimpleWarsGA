@@ -1,66 +1,5 @@
 #include "cfield.h"
-using namespace Representation;
-
-CShotRepresentation::CShotRepresentation(int x, int y, bool side) {
-	m_x = x / CELL_SIZE;
-	m_y = y / CELL_SIZE;
-	m_rect.x = (x / CELL_SIZE) * CELL_SIZE;
-	m_rect.y = (y / CELL_SIZE) * CELL_SIZE;
-	m_rect.w = CELL_SIZE;
-	m_rect.h = CELL_SIZE;
-	m_side = side;
-}
-
-SDL_Rect* CShotRepresentation::rect() {
-	return &m_rect;
-}
-
-Unit::EUnitClass CShotRepresentation::type() const {
-	return Unit::EUnitClass::NO_UNIT;
-}
-
-bool CShotRepresentation::side() const {
-	return m_side;
-}
-
-int CShotRepresentation::x() const {
-	return m_x;
-}
-
-int CShotRepresentation::y() const {
-	return m_y;
-}
-
-CUnitRepresentation::CUnitRepresentation(int x, int y, Unit::EUnitClass type, bool side) {
-	m_x = x / CELL_SIZE;
-	m_y = y / CELL_SIZE;
-	m_rect.x = (x / CELL_SIZE) * CELL_SIZE; 
-	m_rect.y = (y / CELL_SIZE) * CELL_SIZE;
-	m_rect.w = CELL_SIZE;
-	m_rect.h = CELL_SIZE;
-	m_type = type;
-	m_side = side;
-}
-
-SDL_Rect* CUnitRepresentation::rect() {
-	return &m_rect;
-}
-
-Unit::EUnitClass CUnitRepresentation::type() const {
-	return m_type;
-}
-
-bool CUnitRepresentation::side() const {
-	return m_side;
-}
-
-int CUnitRepresentation::x() const {
-	return m_x;
-}
-
-int CUnitRepresentation::y() const {
-	return m_y;
-}
+using namespace Field;
 
 CField::CField(size_t vsize, size_t hsize) {
 	m_field.resize(hsize);
@@ -84,7 +23,7 @@ void CField::renew() {
 	if(!m_elements.empty()) m_next_element = m_elements.begin();
 }
 
-void CField::add_element(IRepresentation* representation) {
+void CField::add_element(Representation::IRepresentation* representation) {
 	int x = representation->x();
 	int y = representation->y();
 	m_field[x][y] = representation;
@@ -101,6 +40,9 @@ void CField::pop_element() {
 }
 
 void CField::renew_positions() {
+	for(size_t i = 0; i < m_elements.size(); ++i) {
+		m_elements[i]->move(m_logic->direction());
+	}
 }
 
 bool CField::element_exists(int x, int y) const {
