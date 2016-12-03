@@ -34,3 +34,13 @@ class ExRendererCreationFailed : public IException {
 			return "[EE]: Failed to create renderer: " + m_error;
 		}
 };
+
+class ExInvalidUnit : public IException {
+	private:
+		std::string m_error;
+	public:
+		ExInvalidUnit(const std::string& error) m_error(error) {}
+		std::string what() const {
+			return "[EE]: Invalid unit: " + m_error;
+		}
+};
