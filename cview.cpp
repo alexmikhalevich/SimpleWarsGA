@@ -4,10 +4,10 @@
 void CView::init() {
 	if(SDL_Init(SDL_INIT_VIDEO) != 0) throw new ExInitFailed(std::string(SDL_GetError()));
 	int request = SDL_GetDesktopDisplayMode(0, &m_display_mode);
-	m_window = SDL_CreateWindow("SimpleGame", 0, 0, 500, 500, SDL_WINDOW_SHOWN);
+	m_window = SDL_CreateWindow("SimpleGame", 0, 0, 500, 500, SDL_WINDOW_SHOWN); //TODO
 	if(m_window == NULL) throw new ExWindowCreationFailed(std::string(SDL_GetError())); 
 	m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-	m_field = new Representation::CField(/*100, 100*/); //TODO: replace with real size from argv
+	m_field = new Representation::CField(500 / Representation::CELL_SIZE, 500 / Representation::CELL_SIZE); //TODO 
 	m_active_type = Unit::EUnitClass::ARCHER;
 	m_active_type_rect.x = 0;
 	m_active_type_rect.y = 0;
@@ -50,21 +50,17 @@ void CView::_redraw() {
 void CView::_process_events() {
 	SDL_Event event;
 	bool quit = false;
-	const Uint8* keyboard_state = SDL_GetKeyboardState(NULL);
 	while(!quit) {
 		SDL_WaitEvent(&event);
 		if(event.type == SDL_QUIT) quit = true;
 		else if(event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT) {
-			m_field->add_element(
-					new Representation::CUnitRepresentation(event.button.x - Representation::CELL_SIZE / 2, 
-										event.button.y - Representation::CELL_SIZE / 2,
-										m_active_type,
-										m_active_side));
+			if(!m_field->element_exists(event.button.x, event.button.y))
+				m_field->add_element(new Representation::CUnitRepresentation(event.button.x, event.button.y, m_active_type,
+										     	     m_active_side));
 		}
 		else if(event.type == SDL_KEYDOWN) {
 			if(event.key.keysym.sym == SDLK_SPACE) {
 				m_active_side = m_active_side ? 0 : 1;
-				std::cerr << m_active_side << std::endl;
 			}
 			else if(event.key.keysym.sym == SDLK_a) {
 				m_active_type = Unit::EUnitClass::ARCHER;

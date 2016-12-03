@@ -16,7 +16,7 @@ class CView {
 		Representation::element m_next_iter;
 		bool m_active_side;
 		SDL_Rect m_active_type_rect;
-		void _set_unit_rect_color(Unit::EUnitClass type, bool side) const;
+		void _set_represent_rect(Unit::EUnitClass type, SDL_Rect* rect, bool side) const;
 		void _renew_cycle();
 		void _redraw();
 		void _process_events();
