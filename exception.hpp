@@ -1,3 +1,5 @@
+#ifndef EXCEPTION_HPP
+#define EXCEPTION_HPP
 #include <string>
 
 class IException {
@@ -44,3 +46,4 @@ class ExInvalidUnit : public IException {
 			return "[EE]: Invalid unit: " + m_error;
 		}
 };
+#endif //EXCEPTION_HPP
