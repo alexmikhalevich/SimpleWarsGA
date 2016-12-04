@@ -1,1 +1,1 @@
-This is my attempt to implement a very simple game engine within the course _Design patters_. 
+This is my attempt to implement a simple war game withing the course _Design patterns_. 
