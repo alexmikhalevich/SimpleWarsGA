@@ -16,7 +16,7 @@ CUnit* CWarriorLogic::get_enemy(CUnit* cur_unit, std::vector<std::vector<CUnit*>
 	return enemy;
 }
 
-void CWarriorLogic::process_enemy(CUnit* cur_unit, CUnit* enemy, std::vector<std::vector<CUnit*>>* field) {
+void CWarriorLogic::process_enemy(CUnit* cur_unit, CUnit* enemy, std::vector<std::vector<ILogicObject*>>* field) {
 	cur_unit->set_target(enemy);
 	if(!enemy) return;
 	Representation::s_point dist = CGeneralLogic::distance(cur_unit->get_position(), enemy->get_position());
@@ -72,6 +72,10 @@ Unit::EUnitClass CUnit::type() const {
 	return m_unit->get_class();
 }
 
+bool CUnit::side() const {
+	return m_representation->side();
+}
+
 void CUnit::take_damage(CUnit* enemy) {
 	m_unit->take_damage(enemy->m_unit->get_base_damage(), enemy->m_unit->damage_type());
 }
@@ -85,7 +89,7 @@ CGeneralLogic::CGeneralLogic(std::vector<std::vector<ILogicObject*>>* field) {
 
 void CGeneralLogic::add_unit(Representation::CUnitRepresentation* repr) {
 	if(repr->type() > 3) throw new ExInvalidUnit("unit class is greater than 3");
-	CUnit* unit = new CUnit(Unit::create_unit(repr->type()), repr);
+	CUnit* unit = new CUnit(Unit::CCreator::create_unit(repr->type()), repr);
 	if(!unit->side()) m_ateam[repr->type()].push_back(unit);
 	else m_bteam[repr->type()].push_back(unit);
 }
@@ -98,8 +102,8 @@ void CGeneralLogic::update() {
 	//TODO: update all units
 }
 
-void CGeneralLogic::_update_units(std::vector<CUnit*>& allies, std::vector<CUnit*>& enemies, Unit::EUnitClass type, 
-			 	     IUnitLogic* ulogic) {
+void CGeneralLogic::_update_units(std::vector<std::vector<CUnit*>>& allies, std::vector<std::vector<CUnit*>>& enemies,
+				  Unit::EUnitClass type, IUnitLogic* ulogic) {
 	for(size_t i = 0; i < allies[type].size(); ++i) {
 		CUnit* cur_unit = allies[type][i];
 		CUnit* enemy = ulogic->get_enemy(cur_unit, enemies);
@@ -107,23 +111,25 @@ void CGeneralLogic::_update_units(std::vector<CUnit*>& allies, std::vector<CUnit
 	}
 }
 
-static CUnit* CGeneralLogic::enemy_in_range(CUnit* cur_unit, std::vector<std::vector<CUnit*>>& enemy_team, unsigned int range) {
+CUnit* CGeneralLogic::enemy_in_range(CUnit* cur_unit, std::vector<std::vector<CUnit*>>& enemy_team, unsigned int range) {
+	Representation::s_point cur_unit_pos = cur_unit->get_position();
 	for(size_t i = 0; i < 3; ++i) {
 		for(size_t j = 0; j < enemy_team[i].size(); ++j) {
-			Representation::s_point dist_point = CGeneralLogic::distance(cur_unit_pos, enemy_unit.get_position());
+			CUnit* enemy_unit = enemy_team[i][j];
+			Representation::s_point dist_point = CGeneralLogic::distance(cur_unit_pos, enemy_unit->get_position());
 			unsigned int dist = (unsigned int)std::sqrt(dist_point.x * dist_point.x + dist_point.y * dist_point.y);
 			if(dist <= range) return enemy_team[i][j];
 		}
 	}
 }
 
-static CUnit* CGeneralLogic::nearest_enemy(CUnit* cur_unit, std::vector<CUnit*>& enemy_team, Unit::EUnitClass type) {
+CUnit* CGeneralLogic::nearest_enemy(CUnit* cur_unit, std::vector<std::vector<CUnit*>>& enemy_team, Unit::EUnitClass type) {
 	Representation::s_point cur_unit_pos = cur_unit->get_position();
 	CUnit* best_unit = NULL;
 	double min_dist = 10000000.0;
 	for(size_t i = 0; i < enemy_team[type].size(); ++i) {
 		CUnit* enemy_unit = enemy_team[type][i];
-		Representation::s_point dist_point = CGeneralLogic::distance(cur_unit_pos, enemy_unit.get_position());
+		Representation::s_point dist_point = CGeneralLogic::distance(cur_unit_pos, enemy_unit->get_position());
 		double dist = std::sqrt(dist_point.x * dist_point.x + dist_point.y * dist_point.y);
 		if(min_dist > dist) {
 			min_dist = dist;
@@ -133,7 +139,7 @@ static CUnit* CGeneralLogic::nearest_enemy(CUnit* cur_unit, std::vector<CUnit*>&
 	return best_unit;
 }
 
-static Representation::s_point CGeneralLogic::distance(Representation::s_point first, Representation::s_point second) {
+Representation::s_point CGeneralLogic::distance(Representation::s_point first, Representation::s_point second) {
 	Representation::s_point res;
 	res.x = second.x - first.x;
 	res.y = second.y - first.y;
