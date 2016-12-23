@@ -6,7 +6,11 @@
 #include "cfield.h"
 #include "exception.hpp"
 
-class CView {
+#define INIT_WINDOW_WIDTH 500
+#define INIT_WINDOW_HEIGHT 500
+
+class CView 
+{
 	private:
 		SDL_DisplayMode m_display_mode;
 		SDL_Window* m_window;
@@ -24,6 +28,24 @@ class CView {
 		CView() {} 
 		void init();
 		~CView();
+		struct ColorArcher 
+		{
+			static const int red = 0;
+			static const int green = 0;
+			static const int blue = 0;
+		};
+		struct ColorWarrior 
+		{
+			static const int red = 230;
+			static const int green = 255;
+			static const int blue = 0;
+		};
+		struct ColorWizard 
+		{
+			static const int red = 105;
+			static const int green = 99;
+			static const int blue = 188;
+		};
 };
 
 #endif //CVIEW_CPP

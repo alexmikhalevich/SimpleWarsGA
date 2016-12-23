@@ -11,9 +11,11 @@
 
 #define EPS 0.0001
 
-namespace Logic {
+namespace Logic 
+{
 	const unsigned int AGRO_RANGE = 3;
-	enum EDirection {
+	enum EDirection 
+	{
 		TOP,
 		BOTTOM,
 		LEFT,
@@ -23,7 +25,8 @@ namespace Logic {
 	class CUnit;
 	class CBullet;
 
-	class ILogicObject {
+	class ILogicObject 
+	{
 		public:
 			virtual void set_representation(Representation::IRepresentation* repr) = 0;
 			virtual void set_target(CUnit* target) = 0;
@@ -35,7 +38,8 @@ namespace Logic {
 			virtual void take_damage(CUnit* enemy) = 0;
 	};
 	
-	class CBullet : public ILogicObject {
+	class CBullet : public ILogicObject 
+	{
 		public:
 			CBullet();
 			SDL_Rect* rect();
@@ -49,7 +53,8 @@ namespace Logic {
 			void take_damage(CUnit* enemy) { /* TODO */ }
 	};
 
-	class CUnit : public ILogicObject {
+	class CUnit : public ILogicObject 
+	{
 		private:
 			Unit::CBaseUnit* m_unit;
 			Representation::CUnitRepresentation* m_representation;
@@ -67,19 +72,22 @@ namespace Logic {
 			void set_representation(Representation::IRepresentation* repr) { /*TODO*/ } 
 	};
 
-	class IUnitLogic {
+	class IUnitLogic 
+	{
 		public:
 			virtual CUnit* get_enemy(CUnit* cur_unit, std::vector<std::vector<CUnit*>>& enemy_team) = 0;
 			virtual void process_enemy(CUnit* cur_unit, CUnit* enemy, std::vector<std::vector<ILogicObject*>>* field) = 0;
 	};
 
-	class CWarriorLogic : public IUnitLogic {
+	class CWarriorLogic : public IUnitLogic 
+	{
 		public:
 			CUnit* get_enemy(CUnit* cur_unit, std::vector<std::vector<CUnit*>>& enemy_team);
 			void process_enemy(CUnit* cur_unit, CUnit* enemy, std::vector<std::vector<ILogicObject*>>* field);
 	};
 
-	class CGeneralLogic {
+	class CGeneralLogic 
+	{
 		private:
 			std::vector<std::vector<CUnit*>> m_ateam;	//side = false
 			std::vector<std::vector<CUnit*>> m_bteam;	//side = true

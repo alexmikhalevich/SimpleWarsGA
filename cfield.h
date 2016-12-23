@@ -7,9 +7,11 @@
 #include "unit.hpp"
 #include "representation.hpp"
 
-namespace Field {
+namespace Field 
+{
 	typedef std::vector<Representation::IRepresentation*>::iterator element;
-	class CField {
+	class CField 
+	{
 		private:
 			std::vector<std::vector<Logic::ILogicObject*>> m_field;
 			std::vector<Representation::IRepresentation*> m_elements;
