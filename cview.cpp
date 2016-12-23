@@ -29,10 +29,10 @@ void CView::_set_represent_rect(Unit::EUnitClass type, SDL_Rect* rect, bool side
 			SDL_SetRenderDrawColor(m_renderer, ColorArcher::red, ColorArcher::green, ColorArcher::blue, 0);
 			break;
 		case Unit::EUnitClass::WARRIOR:
-			SDL_SetRenderDrawColor(m_renderer, ColorWarrior.red, ColorWarrior.green, ColorWarrior.blue, 0);
+			SDL_SetRenderDrawColor(m_renderer, ColorWarrior::red, ColorWarrior::green, ColorWarrior::blue, 0);
 			break;
 		case Unit::EUnitClass::WIZARD:
-			SDL_SetRenderDrawColor(m_renderer, ColorWizard.red, ColorWizard.green, ColorWizard.blue, 0);
+			SDL_SetRenderDrawColor(m_renderer, ColorWizard::red, ColorWizard::green, ColorWizard::blue, 0);
 			break;
 		case Unit::EUnitClass::NO_UNIT:
 			SDL_SetRenderDrawColor(m_renderer, 255, 0, 0, 0);
